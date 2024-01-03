@@ -1,11 +1,25 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
+func testSlice() {
+	arr := [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	s1 := arr[:1]
+	s2 := arr[1:2]
+	s1 = append(s1, 100)
+	s2 = append(s2, 200)
+	fmt.Println(arr)
+	fmt.Println(s1)
+	fmt.Println(s2)
+
+}
 func main() {
+	//testSlice()
 	//first := getInput()
 	//second := getInput()
-	first := []string{"D", "K", "Q", "J", "10", "9", "9", "9", "9"}
+	first := []string{"D", "K", "Q", "J", "10", "9", "9", "9"}
 	second := []string{"X", "A", "A", "A", "A", "K", "Q", "J", "10"}
 
 	haveSubmit := make([]string, 0)
@@ -38,9 +52,9 @@ func getInput() []string {
 
 // 先手一副牌,后手一副牌,看谁赢
 func canWin(first, second, haveSubmit []string) bool {
-	fmt.Println("出牌方:", first)
-	fmt.Println("另一方:", second)
-	fmt.Println("上一轮出牌:", haveSubmit)
+	//fmt.Println("出牌方:", first)
+	//fmt.Println("另一方:", second)
+	//fmt.Println("上一轮出牌:", haveSubmit)
 
 	if len(first) == 0 {
 		return true
@@ -49,10 +63,18 @@ func canWin(first, second, haveSubmit []string) bool {
 		return false
 	}
 	canSubmit := make([][]string, 0)
-	getCandidate(first, make([]string, 0), haveSubmit, 0, canSubmit)
+	getCandidate(first, make([]string, 0), haveSubmit, 0, &canSubmit)
+	if len(canSubmit) == 0 {
+		return !canWin(second, first, make([]string, 0))
+	}
 	for i := 0; i < len(canSubmit); i++ {
 		// 递归调用canWin
 		if !canWin(second, remove(first, canSubmit[i]), canSubmit[i]) {
+			fmt.Println("---------------")
+			fmt.Println("出牌方:", first)
+			fmt.Println("另一方:", second)
+			fmt.Println("上一轮出牌:", haveSubmit)
+			fmt.Println("出牌:", canSubmit[i])
 			return true
 		}
 	}
@@ -76,7 +98,7 @@ func remove(first, second []string) []string {
 	return res
 }
 
-func getCandidate(x, candidate, haveSubmit []string, i int, res [][]string) {
+func getCandidate(x, candidate, haveSubmit []string, i int, res *[][]string) {
 	if i == len(x) {
 		if len(candidate)+len(haveSubmit) == 0 {
 			return
@@ -94,13 +116,14 @@ func getCandidate(x, candidate, haveSubmit []string, i int, res [][]string) {
 		}
 		willAppend := make([]string, len(candidate))
 		copy(willAppend, candidate)
-		res = append(res, willAppend)
+		*res = append(*res, willAppend)
 		return
 	}
 	getCandidate(x, candidate, haveSubmit, i+1, res)
 	candidate = append(candidate, x[i])
 	getCandidate(x, candidate, haveSubmit, i+1, res)
-	candidate = candidate[:len(candidate)-1]
+	// 回溯
+	//candidate = candidate[:len(candidate)-1]
 }
 
 // isBigger 检查candidate是否比haveSubmit大
@@ -182,7 +205,7 @@ func isBiggerSanDaiYi(candidate, haveSubmit []string) bool {
 
 // isBiggerDanZhi 检查candidate是否比haveSubmit大
 func isBiggerDanZhi(candidate, haveSubmit []string) bool {
-	return getIndex(candidate[0]) > getIndex(haveSubmit[0])
+	return getIndex(candidate[0]) < getIndex(haveSubmit[0])
 }
 
 // 验证扑克牌是否合法
