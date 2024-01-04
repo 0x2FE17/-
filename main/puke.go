@@ -4,17 +4,6 @@ import (
 	"fmt"
 )
 
-func testSlice() {
-	arr := [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-	s1 := arr[:1]
-	s2 := arr[1:2]
-	s1 = append(s1, 100)
-	s2 = append(s2, 200)
-	fmt.Println(arr)
-	fmt.Println(s1)
-	fmt.Println(s2)
-
-}
 func main() {
 	//testSlice()
 	//first := getInput()
