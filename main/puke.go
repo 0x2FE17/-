@@ -6,10 +6,10 @@ import (
 
 func main() {
 	//testSlice()
-	//first := getInput()
-	//second := getInput()
-	first := []string{"D", "K", "Q", "J", "10", "9", "9", "9"}
-	second := []string{"X", "A", "A", "A", "A", "K", "Q", "J", "10"}
+	first := getInput()
+	second := getInput()
+	//first := []string{"D", "K", "Q", "J", "10", "9", "9", "9"}
+	//second := []string{"X", "A", "A", "A", "A", "K", "Q", "J", "10"}
 
 	haveSubmit := make([]string, 0)
 	if canWin(first, second, haveSubmit) {
